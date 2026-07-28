@@ -105,7 +105,7 @@ jobs:
       run: echo 'sdk.dir='$ANDROID_SDK_ROOT > android/local.properties
 
     - name: Build for Android
-      run: cd android && ../gradle/gradle-8.11.1/bin/gradle assembleRelease --stacktrace 2>&1 | tee ../build.log; BUILD_EXIT=${PIPESTATUS[0]}; if [ $BUILD_EXIT -eq 0 ]; then mv app/build/outputs/apk/release/app-release.apk ../NFSU.apk; fi; exit $BUILD_EXIT
+      run: cd android && ../gradle/gradle-8.11.1/bin/gradle assembleRelease --stacktrace 2>&1 | tee ../build.log; BUILD_EXIT=${PIPESTATUS[0]}; if [ $BUILD_EXIT -ne 0 ]; then echo "===== BUILD LOG TAIL ====="; tail -n 100 ../build.log; echo "===== END BUILD LOG TAIL ====="; fi; if [ $BUILD_EXIT -eq 0 ]; then mv app/build/outputs/apk/release/app-release.apk ../NFSU.apk; fi; exit $BUILD_EXIT
       env:
         ANDROID_NDK_ROOT: '/usr/local/lib/android/sdk/ndk/25.2.9519653'
         CMAKE: ${{ github.workspace }}/vendor/cmake/bin/cmake
