@@ -105,10 +105,17 @@ jobs:
       run: echo 'sdk.dir='$ANDROID_SDK_ROOT > android/local.properties
 
     - name: Build for Android
-      run: cd android && ../gradle/gradle-8.11.1/bin/gradle assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../NFSU.apk
+      run: cd android && ../gradle/gradle-8.11.1/bin/gradle assembleRelease --stacktrace 2>&1 | tee ../build.log; BUILD_EXIT=${PIPESTATUS[0]}; if [ $BUILD_EXIT -eq 0 ]; then mv app/build/outputs/apk/release/app-release.apk ../NFSU.apk; fi; exit $BUILD_EXIT
       env:
         ANDROID_NDK_ROOT: '/usr/local/lib/android/sdk/ndk/25.2.9519653'
         CMAKE: ${{ github.workspace }}/vendor/cmake/bin/cmake
+
+    - name: Upload build log
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: build-log
+        path: build.log
 
     - uses: actions/upload-artifact@v4
       with:
