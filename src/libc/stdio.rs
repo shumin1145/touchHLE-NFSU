@@ -664,6 +664,14 @@ fn fileno(env: &mut Environment, file_ptr: MutPtr<FILE>) -> posix_io::FileDescri
     fd
 }
 
+fn flockfile(env: &mut Environment, file_ptr: MutPtr<FILE>) {
+    log_dbg!("flockfile({:?}) — stubbed, no actual locking", file_ptr);
+}
+
+fn funlockfile(env: &mut Environment, file_ptr: MutPtr<FILE>) {
+    log_dbg!("funlockfile({:?}) — stubbed, no actual locking", file_ptr);
+}
+
 pub const CONSTANTS: ConstantExports = &[
     (
         "___stdinp",
@@ -723,5 +731,7 @@ pub const FUNCTIONS: FunctionExports = &[
 
     // POSIX-specific functions
     export_c_func!(fileno(_)),
+    export_c_func!(flockfile(_)),
+    export_c_func!(funlockfile(_)),
 ];
 
