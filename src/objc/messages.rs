@@ -314,8 +314,8 @@ pub trait MsgSendSignature: 'static {
     }
 }
 
-// --- Extended implementations for higher number of arguments (7, 8, 9 parameters) ---
-impl<R: 'static, P1: 'static, P2: 'static, P3: 'static, P4: 'static, P5: 'static, P6: 'static, P7: 'static> MsgSendSignature for (R, (id, SEL, P1, P2, P3, P4, P5, P6, P7)) {}
+// --- Extended implementations for higher number of arguments (8, 9 parameters) ---
+// Note: 7-parameter MsgSendSignature is provided by impl_HostIMP! in methods.rs.
 impl<R: 'static, P1: 'static, P2: 'static, P3: 'static, P4: 'static, P5: 'static, P6: 'static, P7: 'static, P8: 'static> MsgSendSignature for (R, (id, SEL, P1, P2, P3, P4, P5, P6, P7, P8)) {}
 impl<R: 'static, P1: 'static, P2: 'static, P3: 'static, P4: 'static, P5: 'static, P6: 'static, P7: 'static, P8: 'static, P9: 'static> MsgSendSignature for (R, (id, SEL, P1, P2, P3, P4, P5, P6, P7, P8, P9)) {}
 
@@ -358,10 +358,8 @@ pub trait MsgSendSuperSignature: 'static {
     type WithoutSuper: MsgSendSignature;
 }
 
-// --- Extended super-call implementations for higher number of arguments ---
-impl<R: 'static, P1: 'static, P2: 'static, P3: 'static, P4: 'static, P5: 'static, P6: 'static, P7: 'static> MsgSendSuperSignature for (R, (ConstPtr<objc_super>, SEL, P1, P2, P3, P4, P5, P6, P7)) {
-    type WithoutSuper = (R, (id, SEL, P1, P2, P3, P4, P5, P6, P7));
-}
+// --- Extended super-call implementations for higher number of arguments (8, 9 parameters) ---
+// Note: 7-parameter MsgSendSuperSignature is provided by impl_HostIMP! in methods.rs.
 impl<R: 'static, P1: 'static, P2: 'static, P3: 'static, P4: 'static, P5: 'static, P6: 'static, P7: 'static, P8: 'static> MsgSendSuperSignature for (R, (ConstPtr<objc_super>, SEL, P1, P2, P3, P4, P5, P6, P7, P8)) {
     type WithoutSuper = (R, (id, SEL, P1, P2, P3, P4, P5, P6, P7, P8));
 }
