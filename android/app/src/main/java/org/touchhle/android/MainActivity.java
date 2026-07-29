@@ -27,8 +27,7 @@ import org.libsdl.app.SDLActivity;
 
 public class MainActivity extends SDLActivity {
     private static final String APPS_DIR = "touchHLE_apps";
-    private static final String IPA_NAME = "极品飞车12.ipa";
-    private static final String ASSET_PATH = APPS_DIR + "/" + IPA_NAME;
+    private static final String IPA_NAME = "game.ipa";
     private static final int COPY_BUFFER_SIZE = 8192;
 
     @Override
@@ -71,7 +70,12 @@ public class MainActivity extends SDLActivity {
             return;
         }
 
-        try (InputStream is = getAssets().open(ASSET_PATH);
+        String assetName = findBundledIpaName();
+        if (assetName == null) {
+            return;
+        }
+
+        try (InputStream is = getAssets().open(APPS_DIR + "/" + assetName);
              OutputStream os = new FileOutputStream(target)) {
             byte[] buf = new byte[COPY_BUFFER_SIZE];
             int len;
@@ -81,5 +85,22 @@ public class MainActivity extends SDLActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String findBundledIpaName() {
+        try {
+            String[] list = getAssets().list(APPS_DIR);
+            if (list == null) {
+                return null;
+            }
+            for (String name : list) {
+                if (name.toLowerCase().endsWith(".ipa")) {
+                    return name;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
