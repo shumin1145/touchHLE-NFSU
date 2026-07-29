@@ -672,6 +672,12 @@ fn funlockfile(env: &mut Environment, file_ptr: MutPtr<FILE>) {
     log_dbg!("funlockfile({:?}) — stubbed, no actual locking", file_ptr);
 }
 
+fn __srget(env: &mut Environment, file_ptr: MutPtr<FILE>) -> i32 {
+    // BSD libc internal slow path for getc() when the stream buffer is empty.
+    // touchHLE doesn't emulate stdio buffering, so just read the next byte.
+    fgetc(env, file_ptr)
+}
+
 pub const CONSTANTS: ConstantExports = &[
     (
         "___stdinp",
@@ -733,5 +739,6 @@ pub const FUNCTIONS: FunctionExports = &[
     export_c_func!(fileno(_)),
     export_c_func!(flockfile(_)),
     export_c_func!(funlockfile(_)),
+    export_c_func!(__srget(_)),
 ];
 
